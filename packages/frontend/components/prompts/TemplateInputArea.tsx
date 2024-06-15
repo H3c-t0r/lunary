@@ -3,6 +3,15 @@ import SmartViewer from "@/components/SmartViewer"
 import TokensBadge from "../blocks/TokensBadge"
 import { PromptEditor } from "./PromptEditor"
 
+import DOMPurify from "dompurify"
+import { Marked } from "marked"
+import markedCodePreview from "marked-code-preview"
+
+const marked = new Marked();
+
+marked.use({ gfm: true });
+marked.use(markedCodePreview());
+
 function TemplateInputArea({
   template,
   setTemplate,
@@ -41,7 +50,16 @@ function TemplateInputArea({
             </Text>
             {outputTokens && <TokensBadge tokens={outputTokens} />}
           </Group>
-          <SmartViewer data={output} error={error} />
+          <SmartViewer data={output} error={error} controls={[
+            { label: 'Text', value: 'text', parse: (data) => data },
+            {
+              value: 'md',
+              label: 'Preview',
+              parse: (data) => DOMPurify.sanitize(
+                marked.parse(data) as string
+              )
+            }
+          ]}/>
         </>
       )}
     </Box>

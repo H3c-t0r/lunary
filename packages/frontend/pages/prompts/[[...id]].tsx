@@ -370,7 +370,7 @@ function Playground() {
 
       // scroll template-input-area to the end
       const element = document.getElementById("template-input-area")
-      element.scrollTop = element.scrollHeight
+      if (element) { element.scrollTop = element.scrollHeight }
     } catch (e) {
       console.error(e)
       setError(e)
@@ -509,6 +509,7 @@ function Playground() {
 
             <ParamItem
               name="Template Mode"
+              description={''}
               value={
                 <SegmentedControl
                   size="xs"
@@ -611,7 +612,9 @@ function Playground() {
               data-testid="run-playground"
               loading={streaming}
               rightSection={
-                <HotkeysInfo hot="Enter" size="sm" style={{ marginTop: -4 }} />
+                <HotkeysInfo hot="Enter" size="sm" style={{
+                  /* marginTop: -4 : Fixes odd icon alignment */
+                }} />
               }
             >
               {template?.id ? "Test template" : "Run"}
